@@ -1,3 +1,3 @@
 # MVP
 
-Material desenvolvido durante a Pós-graduação em Ciência de Dados e Analytics da PUC-Rio.
+Materiais desenvolvido durante a Pós-graduação em Ciência de Dados e Analytics da PUC-Rio.
