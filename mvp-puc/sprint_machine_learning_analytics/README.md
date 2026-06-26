@@ -1,0 +1,1 @@
+O arquivo dataset_ibge_soja_algodao.csv contém uma cópia da base bruta obtida pela API pública do IBGE/PAM, incluída para garantir a reprodutibilidade do notebook caso a API esteja temporariamente indisponível.
