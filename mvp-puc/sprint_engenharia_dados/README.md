@@ -39,6 +39,8 @@ Foram utilizadas três bases de dados:
 
 Os dados do IBGE foram obtidos por meio da API SIDRA, enquanto os dados da ANP foram obtidos a partir dos arquivos públicos disponibilizados pela agência.
 
+- **Licença e condições de uso:** as bases utilizadas neste projeto são provenientes de órgãos públicos federais e disponibilizadas publicamente para consulta e reutilização. Os dados do IBGE/SIDRA são dados públicos de livre utilização, conforme a política federal de dados abertos. Os conjuntos da ANP utilizados no projeto são disponibilizados em sua seção de Dados Abertos, permitindo sua utilização e reutilização, observadas as condições de atribuição aplicáveis ao conteúdo publicado no portal gov.br. Neste MVP, os dados são utilizados exclusivamente para finalidade acadêmica, com identificação das respectivas fontes.
+
 Após a coleta, os dados foram convertidos para DataFrames Spark e persistidos em tabelas Delta na camada Bronze:
 
 - `bronze_ibge_pam_soja`
@@ -85,17 +87,187 @@ A adoção do modelo Flat evita a introdução de complexidade desnecessária pa
 | Gold | `gold_soja_biodiesel_regiao_ano` | Integração da produção de soja e da produção de biodiesel na granularidade região/ano. |
 | Gold | `gold_materia_prima_soja_regiao_ano` | Quantidade de matérias-primas derivadas da soja utilizadas na produção de biodiesel, agregada por região e ano. |
 
+### Linhagem dos dados
+
+A linhagem dos dados foi estruturada de acordo com as etapas da arquitetura Medallion, permitindo rastrear a origem e as principais transformações realizadas até a disponibilização dos dados para análise.
+
+```mermaid
+flowchart LR
+    A[IBGE / PAM] --> B[bronze_ibge_pam_soja]
+    B --> C[silver_ibge_soja]
+    C --> G[gold_soja_biodiesel_regiao_ano]
+
+    D[ANP / Produção de Biodiesel] --> E[bronze_anp_biodiesel]
+    E --> F[silver_anp_biodiesel]
+    F --> G
+
+    H[ANP / Matérias-primas] --> I[bronze_anp_materia_prima]
+    I --> J[silver_anp_materia_prima]
+    J --> K[gold_materia_prima_soja_regiao_ano]
+```
+
+Os dados do IBGE/PAM passam pelas etapas de ingestão e tratamento antes de serem agregados por região e ano. Os dados de produção de biodiesel da ANP seguem fluxo equivalente e são posteriormente integrados aos dados agrícolas pelas chaves `ano` e `regiao`, formando a tabela `gold_soja_biodiesel_regiao_ano`.
+
+A base de matérias-primas da ANP segue um fluxo independente até a camada Gold. Nessa etapa são selecionados os registros relacionados à soja e os volumes são agregados por região e ano, originando a tabela `gold_materia_prima_soja_regiao_ano`.
+
 ### Catálogo de Dados
 
-O catálogo a seguir apresenta os atributos das tabelas utilizadas nas etapas de transformação e análise, incluindo seus tipos, significado, unidade ou domínio e origem dos dados.
+O catálogo a seguir documenta as tabelas das camadas Silver e Gold utilizadas no processamento e nas análises do projeto. Para cada atributo são apresentados o tipo de dado, sua descrição, unidade ou domínio quando aplicável e sua origem.
+
+#### `silver_ibge_soja`
+
+Tabela com os dados da produção agrícola de soja tratados e organizados na granularidade de unidade da federação e ano.
+
+| Campo | Tipo | Descrição | Unidade / Domínio | Origem |
+| --- | --- | --- | --- | --- |
+| `codigo_uf` | string | Código da unidade da federação. | Código IBGE | IBGE/PAM |
+| `uf` | string | Nome da unidade da federação. | UFs brasileiras | IBGE/PAM |
+| `ano` | integer | Ano de referência da produção agrícola. | 2015–2023 | IBGE/PAM |
+| `area_plantada_ha` | double | Área plantada ou destinada à colheita de soja. | hectares (ha) | IBGE/PAM |
+| `area_colhida_ha` | double | Área efetivamente colhida de soja. | hectares (ha) | IBGE/PAM |
+| `producao_soja_t` | double | Quantidade de soja produzida. | toneladas (t) | IBGE/PAM |
+| `rendimento_kg_ha` | double | Rendimento médio da produção de soja. | kg/ha | IBGE/PAM |
+| `valor_producao_mil_reais` | double | Valor da produção de soja. | mil reais | IBGE/PAM |
+| `regiao` | string | Região brasileira correspondente à UF. | NORTE, NORDESTE, CENTRO-OESTE, SUDESTE, SUL | Derivado da UF |
+
+#### `silver_anp_biodiesel`
+
+Tabela contendo os registros de produção de biodiesel tratados e padronizados.
+
+| Campo | Tipo | Descrição | Unidade / Domínio | Origem |
+| --- | --- | --- | --- | --- |
+| `ano` | long | Ano de referência da produção. | 2015–2023 | ANP |
+| `mes` | string | Mês de referência da produção. | Mês | ANP |
+| `regiao` | string | Região brasileira do produtor. | NORTE, NORDESTE, CENTRO-OESTE, SUDESTE, SUL | ANP |
+| `uf` | string | Unidade da federação do produtor. | UF brasileira | ANP |
+| `produtor` | string | Identificação do produtor de biodiesel. | Texto | ANP |
+| `produto` | string | Produto registrado na base. | BIODIESEL | ANP |
+| `producao_biodiesel` | double | Volume de biodiesel produzido no período. | m³ | ANP |
+
+#### `silver_anp_materia_prima`
+
+Tabela contendo os registros tratados das matérias-primas utilizadas na produção de biodiesel.
+
+| Campo | Tipo | Descrição | Unidade / Domínio | Origem |
+| --- | --- | --- | --- | --- |
+| `data_competencia` | date | Data correspondente à competência do registro. | Data | Derivado do período informado pela ANP |
+| `ano` | integer | Ano da competência. | 2017–2023 | Derivado de `data_competencia` |
+| `mes` | integer | Mês da competência. | 1–12 | Derivado de `data_competencia` |
+| `regiao` | string | Região brasileira associada ao registro. | NORTE, NORDESTE, CENTRO-OESTE, SUDESTE, SUL | ANP |
+| `estado` | string | Estado associado ao registro. | Estados brasileiros | ANP |
+| `produto` | string | Tipo de matéria-prima utilizada na produção de biodiesel. | Texto | ANP |
+| `quantidade_m3` | double | Quantidade da matéria-prima utilizada. | m³ | ANP |
+
+#### `gold_soja_biodiesel_regiao_ano`
+
+Tabela analítica principal que integra a produção agrícola de soja e a produção de biodiesel na granularidade de região e ano.
+
+| Campo | Tipo | Descrição | Unidade / Domínio | Origem / Linhagem |
+| --- | --- | --- | --- | --- |
+| `ano` | integer | Ano de referência da observação. | 2015–2023 | Silver IBGE + Silver ANP |
+| `regiao` | string | Região brasileira da observação. | NORTE, NORDESTE, CENTRO-OESTE, SUDESTE, SUL | Silver IBGE + Silver ANP |
+| `producao_soja_t` | double | Produção total de soja agregada por região e ano. | toneladas (t) | `silver_ibge_soja` |
+| `producao_biodiesel_m3` | double | Produção total de biodiesel agregada por região e ano. | m³ | `silver_anp_biodiesel` |
+
+#### `gold_materia_prima_soja_regiao_ano`
+
+Tabela analítica contendo a utilização de matérias-primas derivadas da soja na produção de biodiesel, agregada por região e ano.
+
+| Campo | Tipo | Descrição | Unidade / Domínio | Origem / Linhagem |
+| --- | --- | --- | --- | --- |
+| `ano` | integer | Ano de referência da utilização da matéria-prima. | 2017–2023 | `silver_anp_materia_prima` |
+| `regiao` | string | Região brasileira associada à utilização da matéria-prima. | NORTE, NORDESTE, CENTRO-OESTE, SUDESTE, SUL | `silver_anp_materia_prima` |
+| `materia_prima_soja_m3` | double | Quantidade agregada de matérias-primas derivadas da soja utilizadas na produção de biodiesel. | m³ | `silver_anp_materia_prima`, registros relacionados à soja |
 
 ## Pipeline de Dados
 
-*Em desenvolvimento.*
+O pipeline foi desenvolvido em notebooks no Databricks utilizando PySpark e organizado de acordo com a arquitetura Medallion. O fluxo de processamento foi dividido em três etapas principais: ingestão dos dados na camada Bronze, tratamento e padronização na camada Silver e integração dos dados para consumo analítico na camada Gold.
+
+### Camada Bronze
+
+A camada Bronze representa a entrada dos dados no pipeline. Os dados provenientes do IBGE e da ANP foram coletados de suas fontes públicas, convertidos para DataFrames Spark e persistidos em tabelas Delta.
+
+Nesta etapa foram criadas as seguintes tabelas:
+
+- `bronze_ibge_pam_soja`
+- `bronze_anp_biodiesel`
+- `bronze_anp_materia_prima`
+
+Os valores originais foram preservados sempre que possível. Foram realizados apenas ajustes técnicos necessários para a persistência, como a adequação dos nomes das colunas dos arquivos da ANP.
+
+### Camada Silver
+
+Na camada Silver foram realizadas as transformações necessárias para padronizar os dados e prepará-los para integração e análise.
+
+Na base do IBGE foram selecionadas as variáveis referentes à área plantada, área colhida, quantidade produzida, rendimento médio e valor da produção. Os dados foram filtrados para o período de 2015 a 2023 e reorganizados para que cada registro representasse uma combinação de unidade da federação e ano.
+
+Valores não disponíveis na fonte foram convertidos para nulos, evitando sua interpretação como valores iguais a zero. Também foi adicionada a região brasileira correspondente a cada unidade da federação.
+
+Na base de produção de biodiesel da ANP foram corrigidos problemas de codificação de caracteres, padronizados os nomes das regiões e unidades da federação e convertida a produção para tipo numérico. Os registros também foram filtrados para o período de 2015 a 2023.
+
+Na base de matérias-primas da ANP, a competência mensal foi convertida para o tipo data, permitindo a criação dos atributos de ano e mês. Também foram corrigidos problemas de codificação de caracteres e padronizados os campos de região, estado, produto e quantidade.
+
+Como resultado, foram criadas as tabelas:
+
+- `silver_ibge_soja`
+- `silver_anp_biodiesel`
+- `silver_anp_materia_prima`
+
+### Camada Gold
+
+A camada Gold foi construída para disponibilizar dados diretamente relacionados às perguntas de negócio.
+
+A produção de soja foi agregada por região e ano a partir dos dados do IBGE. De forma equivalente, os registros da ANP foram agregados para obter a produção total de biodiesel por região e ano. Os dois conjuntos foram então integrados pelas dimensões `ano` e `regiao`, resultando na tabela:
+
+- `gold_soja_biodiesel_regiao_ano`
+
+Essa tabela possui granularidade de **região e ano** e permite comparar a evolução e a distribuição regional da produção de soja e biodiesel.
+
+Também foi criada uma tabela específica para analisar a utilização de matérias-primas derivadas da soja. Os registros relacionados à soja foram selecionados na base de matérias-primas da ANP e agregados por região e ano, originando:
+
+- `gold_materia_prima_soja_regiao_ano`
+
+A segunda tabela Gold possui granularidade de **região e ano** e permite acompanhar a evolução da utilização de matérias-primas derivadas da soja na produção de biodiesel.
+
+Dessa forma, o pipeline implementado pode ser resumido pelo fluxo:
+
+`Fontes públicas (IBGE/ANP) → Bronze → Silver → Gold → Análises`
+
+Os notebooks utilizados no desenvolvimento seguem a mesma separação lógica:
+
+- `01_bronze_ingestao`: coleta, leitura e persistência dos dados brutos.
+- `02_silver_transformacao`: limpeza, conversão de tipos, padronização e preparação dos dados.
+- `03_gold_analise`: agregação, integração, construção das tabelas Gold e realização das análises relacionadas às perguntas de negócio.
 
 ## Qualidade de Dados
 
-*Em desenvolvimento.*
+A qualidade dos dados foi avaliada durante as etapas de transformação e após a construção das tabelas analíticas, considerando principalmente completude, consistência, unicidade, acurácia e presença de valores potencialmente atípicos.
+
+### Verificações e tratamentos na camada Silver
+
+Durante o tratamento dos dados do IBGE, foram identificados valores não numéricos representados pelo caractere `-`, indicando ausência de informação na fonte. Esses valores foram convertidos para `NULL`, evitando interpretá-los incorretamente como produção ou área igual a zero.
+
+Após a transformação, foram identificados valores nulos em alguns dos indicadores agrícolas. Esses registros foram mantidos, pois representam indisponibilidade da informação na fonte e não necessariamente ausência de produção. Dessa forma, não foi realizado preenchimento artificial dos valores ausentes.
+
+Também foi verificada a correspondência entre as unidades da federação e as cinco regiões brasileiras após a inclusão do atributo `regiao`, não sendo identificadas UFs sem região associada.
+
+Nos dados da ANP foram identificados problemas de codificação de caracteres nos arquivos originais. Os textos foram corrigidos e os campos de região, unidade da federação, estado e produto foram padronizados. As medidas de produção e quantidade também foram convertidas para tipos numéricos adequados.
+
+Na base de matérias-primas, a competência foi convertida para o tipo data e validada quanto à cobertura temporal. Foram encontrados registros entre janeiro de 2017 e agosto de 2023, totalizando 80 competências mensais distintas. Essa característica foi preservada e considerada posteriormente nas análises, sem preenchimento dos períodos não disponíveis.
+
+### Validação das tabelas Gold
+
+Após a construção das tabelas Gold, foram realizadas novas verificações para avaliar se os dados estavam adequados às análises de negócio.
+
+Na tabela `gold_soja_biodiesel_regiao_ano`, foram obtidos 45 registros, correspondentes às cinco regiões brasileiras durante os nove anos do período de 2015 a 2023. A combinação de `ano` e `regiao` apresentou 45 chaves distintas, confirmando a unicidade da granularidade definida.
+
+Não foram identificados valores nulos nas medidas utilizadas nessa tabela, nem valores negativos para a produção de soja ou para a produção de biodiesel. Também foram confirmados nove anos distintos e cinco regiões, conforme esperado para o escopo definido.
+
+As estatísticas descritivas indicaram diferenças relevantes de magnitude entre as observações regionais. Entretanto, os valores extremos foram mantidos, pois representam observações válidas das fontes oficiais e não foram identificados indícios de erro que justificassem sua remoção ou substituição.
+
+Na tabela `gold_materia_prima_soja_regiao_ano`, foi mantida a cobertura temporal disponível na fonte da ANP. Como os dados de 2023 estão disponíveis apenas até agosto, as comparações anuais dessa variável consideram prioritariamente os anos completos de 2017 a 2022, evitando comparar um ano parcial diretamente com anos completos.
+
+Dessa forma, os tratamentos realizados buscaram preservar os dados das fontes sempre que possível, corrigindo problemas técnicos de formato e padronização sem introduzir valores artificiais ou excluir observações válidas.
 
 ## Análise de Dados
 
