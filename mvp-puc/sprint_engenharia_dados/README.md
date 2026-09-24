@@ -195,6 +195,10 @@ Nesta etapa foram criadas as seguintes tabelas:
 
 Os valores originais foram preservados sempre que possível. Foram realizados apenas ajustes técnicos necessários para a persistência, como a adequação dos nomes das colunas dos arquivos da ANP.
 
+![Persistência dos dados do IBGE/PAM na camada Bronze](images/bronze_ibge_pam_soja.png)
+
+*Figura 1 — Persistência e validação dos dados brutos do IBGE/PAM na camada Bronze, armazenados em formato Delta. Fonte: elaboração própria no Databricks.*
+
 ### Camada Silver
 
 Na camada Silver foram realizadas as transformações necessárias para padronizar os dados e prepará-los para integração e análise.
