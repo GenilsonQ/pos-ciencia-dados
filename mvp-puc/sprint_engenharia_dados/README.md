@@ -271,7 +271,53 @@ Dessa forma, os tratamentos realizados buscaram preservar os dados das fontes se
 
 ## Análise de Dados
 
-*Em desenvolvimento.*
+As análises foram realizadas a partir das tabelas da camada Gold, utilizando dados agregados por ano e região. O objetivo foi responder às quatro perguntas de negócio definidas para o projeto, relacionando a produção agrícola de soja, a produção de biodiesel e a utilização de matérias-primas derivadas da soja.
+
+### 1. Evolução da produção de soja e biodiesel no Brasil
+
+Para analisar a evolução nacional, os dados regionais da tabela `gold_soja_biodiesel_regiao_ano` foram agregados por ano.
+
+Entre 2015 e 2023, a produção de soja passou de aproximadamente **97,5 milhões de toneladas para 152,1 milhões de toneladas**, enquanto a produção de biodiesel passou de aproximadamente **3,94 milhões de m³ para 7,53 milhões de m³**.
+
+Considerando 2015 como índice 100, a produção de soja atingiu aproximadamente **156,1** em 2023, enquanto a produção de biodiesel atingiu aproximadamente **191,3**. Isso representa um crescimento aproximado de **56% para a soja** e **91% para o biodiesel** no período.
+
+Apesar da tendência geral de crescimento das duas séries, a evolução não ocorreu de forma proporcional. A produção de biodiesel apresentou crescimento relativo mais intenso, principalmente a partir de 2018, enquanto a produção de soja apresentou oscilações ao longo do período.
+
+**Resposta à pergunta 1:** tanto a produção de soja quanto a produção de biodiesel cresceram entre 2015 e 2023, porém em ritmos diferentes, com crescimento relativo mais acentuado da produção de biodiesel.
+
+### 2. Distribuição regional da produção de soja e biodiesel
+
+A análise regional mostra diferenças na distribuição das duas atividades no território brasileiro.
+
+No acumulado do período analisado, o **Centro-Oeste apresenta o maior volume de produção de soja**, seguido pela região Sul. Para a produção de biodiesel, **Sul e Centro-Oeste concentram os maiores volumes**, com a região Sul apresentando produção acumulada de biodiesel ligeiramente superior.
+
+Os resultados mostram que uma maior produção agrícola de soja em determinada região não implica necessariamente uma produção de biodiesel na mesma proporção. Isso é compatível com o fato de a soja possuir diferentes destinos econômicos e de a cadeia produtiva do biodiesel depender de outros fatores além da disponibilidade regional do grão.
+
+**Resposta à pergunta 2:** a produção de soja está fortemente concentrada no Centro-Oeste e no Sul, enquanto a produção de biodiesel também se concentra nessas regiões, mas apresenta uma distribuição regional que não acompanha de forma diretamente proporcional a produção agrícola de soja.
+
+### 3. Evolução das matérias-primas derivadas da soja
+
+Para esta análise foram considerados os registros da ANP relacionados às matérias-primas derivadas da soja utilizadas na produção de biodiesel.
+
+Como a base possui cobertura entre janeiro de 2017 e agosto de 2023, a comparação anual foi realizada utilizando prioritariamente os anos completos de **2017 a 2022**, evitando comparar diretamente o ano parcial de 2023 com os anos completos.
+
+O volume agregado passou de aproximadamente **2,77 milhões de m³ em 2017** para **4,23 milhões de m³ em 2022**. Durante esse período ocorreu crescimento até 2021, quando o volume atingiu aproximadamente **4,93 milhões de m³**, seguido por redução em 2022.
+
+Mesmo com a queda observada no último ano completo da série, o volume de 2022 permaneceu superior ao registrado no início do período analisado.
+
+**Resposta à pergunta 3:** a utilização de matérias-primas derivadas da soja apresentou crescimento entre 2017 e 2021, seguido por redução em 2022, permanecendo ainda acima do volume observado em 2017.
+
+### 4. Associação entre produção de soja e produção de biodiesel
+
+Para investigar a associação entre as duas séries, os dados foram agregados em nível nacional por ano e foi calculado o coeficiente de correlação de Pearson para o período de 2015 a 2023.
+
+O coeficiente obtido foi de aproximadamente **0,91**, indicando uma associação linear positiva entre a produção nacional de soja e a produção nacional de biodiesel no período analisado.
+
+Entretanto, esse resultado deve ser interpretado com cautela. A análise considera apenas **nove observações anuais** e ambas as séries apresentam tendência de crescimento ao longo do período, fator que também pode contribuir para a correlação observada.
+
+Além disso, correlação não implica causalidade. A produção de soja possui diferentes destinos econômicos e o crescimento da produção de biodiesel depende de outros fatores que não foram modelados neste MVP.
+
+**Resposta à pergunta 4:** os dados apresentam uma associação positiva entre a produção de soja e a produção de biodiesel no período analisado, mas os resultados não permitem concluir que o aumento da produção de soja seja responsável pelo crescimento da produção de biodiesel.
 
 ## Autoavaliação
 
