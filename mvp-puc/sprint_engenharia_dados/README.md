@@ -217,6 +217,10 @@ Como resultado, foram criadas as tabelas:
 - `silver_anp_biodiesel`
 - `silver_anp_materia_prima`
 
+![Tratamento de valores ausentes nos dados do IBGE na camada Silver](images/silver_valores_ausentes_ibge.png)
+
+*Figura — Verificação e tratamento de valores ausentes nos dados do IBGE/PAM durante a transformação na camada Silver. Os valores indisponíveis na fonte foram preservados como `NULL`, evitando sua interpretação como valores iguais a zero. Fonte: elaboração própria no Databricks.*
+
 ### Camada Gold
 
 A camada Gold foi construída para disponibilizar dados diretamente relacionados às perguntas de negócio.
