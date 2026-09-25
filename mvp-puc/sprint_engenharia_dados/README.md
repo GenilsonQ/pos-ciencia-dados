@@ -217,9 +217,9 @@ Como resultado, foram criadas as tabelas:
 - `silver_anp_biodiesel`
 - `silver_anp_materia_prima`
 
-![Tratamento de valores ausentes nos dados do IBGE na camada Silver](images/silver_valores_ausentes_ibge.png)
+Como evidência da execução da etapa Silver, as três tabelas tratadas foram persistidas em formato Delta e posteriormente validadas quanto à quantidade de registros.
 
-*Figura — Verificação e tratamento de valores ausentes nos dados do IBGE/PAM durante a transformação na camada Silver. Os valores indisponíveis na fonte foram preservados como `NULL`, evitando sua interpretação como valores iguais a zero. Fonte: elaboração própria no Databricks.*
+![Persistência e validação das tabelas da camada Silver](images/silver_tabelas_persistidas.png)
 
 ### Camada Gold
 
@@ -254,6 +254,10 @@ A qualidade dos dados foi avaliada durante as etapas de transformação e após 
 ### Verificações e tratamentos na camada Silver
 
 Durante o tratamento dos dados do IBGE, foram identificados valores não numéricos representados pelo caractere `-`, indicando ausência de informação na fonte. Esses valores foram convertidos para `NULL`, evitando interpretá-los incorretamente como produção ou área igual a zero.
+
+![Verificação de valores ausentes nos dados do IBGE](images/silver_valores_ausentes_ibge.png)
+
+*Figura — Verificação e tratamento de valores ausentes nos dados do IBGE/PAM durante a transformação na camada Silver. Os valores indisponíveis na fonte foram preservados como `NULL`, evitando sua interpretação como valores iguais a zero. Fonte: elaboração própria no Databricks.*
 
 Após a transformação, foram identificados valores nulos em alguns dos indicadores agrícolas. Esses registros foram mantidos, pois representam indisponibilidade da informação na fonte e não necessariamente ausência de produção. Dessa forma, não foi realizado preenchimento artificial dos valores ausentes.
 
