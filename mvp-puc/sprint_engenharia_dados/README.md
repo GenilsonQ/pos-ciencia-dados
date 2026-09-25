@@ -183,6 +183,10 @@ Tabela analítica contendo a utilização de matérias-primas derivadas da soja 
 
 O pipeline foi desenvolvido em notebooks no Databricks utilizando PySpark e organizado de acordo com a arquitetura Medallion. O fluxo de processamento foi dividido em três etapas principais: ingestão dos dados na camada Bronze, tratamento e padronização na camada Silver e integração dos dados para consumo analítico na camada Gold.
 
+![Organização dos notebooks do pipeline no Databricks](images/pipeline_notebooks_databricks.png)
+
+*Figura — Organização do pipeline no ambiente Databricks, composto pelos notebooks responsáveis pelas etapas de ingestão na camada Bronze, transformação na camada Silver e integração e análise na camada Gold. Fonte: elaboração própria no Databricks.*
+
 ### Camada Bronze
 
 A camada Bronze representa a entrada dos dados no pipeline. Os dados provenientes do IBGE e da ANP foram coletados de suas fontes públicas, convertidos para DataFrames Spark e persistidos em tabelas Delta.
