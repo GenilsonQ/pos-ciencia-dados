@@ -287,7 +287,7 @@ Na base de matérias-primas, a competência foi convertida para o tipo data e va
 
 > 📓 **Implementação detalhada:** consulte o notebook
 > [`02_silver_transformacao.ipynb`](notebooks/02_silver_transformacao.ipynb)
-> para visualizar as etapas de limpeza, padronização, tratamento dos valores ausentes, etc.
+> para visualizar as verificações e os tratamentos de qualidade realizados na camada Silver.
 
 ### Validação das tabelas Gold
 
@@ -383,7 +383,7 @@ Além disso, correlação não implica causalidade. A produção de soja possui 
 
 > 📓 **Implementação detalhada:** consulte o notebook
 > [`03_gold_analise.ipynb`](notebooks/03_gold_analise.ipynb)
-> visualizar as análises utilizadas para responder às perguntas de negócio.
+> para visualizar as análises utilizadas para responder às perguntas de negócio.
 
 ## Autoavaliação
 
