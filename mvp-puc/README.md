@@ -2,7 +2,7 @@
 
 Material desenvolvido durante a Pós-graduação em Ciência de Dados e Analytics da PUC-Rio.
 
-**1) Machine Learning & Analytics**
+## 1) Machine Learning & Analytics
 
 Este projeto desenvolve um modelo de Machine Learning (ML) para prever a produtividade de soja e algodão no ano seguinte (Ex: dados de 2022 - previsão da produtividade de 2023), por Unidade da Federação (UF), utilizando dados públicos da Pesquisa Agrícola Municipal (PAM/IBGE). O estudo considera essas culturas no contexto da cadeia de produção do biodiesel.
 
