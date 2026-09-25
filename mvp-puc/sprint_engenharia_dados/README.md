@@ -184,8 +184,7 @@ Tabela analítica contendo a utilização de matérias-primas derivadas da soja 
 O pipeline foi desenvolvido em notebooks no Databricks utilizando PySpark e organizado de acordo com a arquitetura Medallion. O fluxo de processamento foi dividido em três etapas principais: ingestão dos dados na camada Bronze, tratamento e padronização na camada Silver e integração dos dados para consumo analítico na camada Gold.
 
 ![Organização dos notebooks do pipeline no Databricks](images/pipeline_notebooks_databricks.png)
-
-*Figura — Organização do pipeline no ambiente Databricks, composto pelos notebooks responsáveis pelas etapas de ingestão na camada Bronze, transformação na camada Silver e integração e análise na camada Gold. Fonte: elaboração própria no Databricks.*
+*Figura 1 — Organização do pipeline no ambiente Databricks, composto pelos notebooks responsáveis pelas etapas de ingestão na camada Bronze, transformação na camada Silver e integração e análise na camada Gold. Fonte: elaboração própria no Databricks.*
 
 ### Camada Bronze
 
@@ -200,8 +199,13 @@ Nesta etapa foram criadas as seguintes tabelas:
 Os valores originais foram preservados sempre que possível. Foram realizados apenas ajustes técnicos necessários para a persistência, como a adequação dos nomes das colunas dos arquivos da ANP.
 
 ![Persistência dos dados do IBGE/PAM na camada Bronze](images/bronze_ibge_pam_soja.png)
+*Figura 2 — Persistência e validação dos dados brutos do IBGE/PAM na camada Bronze, armazenados em formato Delta. Fonte: elaboração própria no Databricks.*
 
-*Figura 1 — Persistência e validação dos dados brutos do IBGE/PAM na camada Bronze, armazenados em formato Delta. Fonte: elaboração própria no Databricks.*
+![Persistência dos dados da ANP-Biodiesel na camada Bronze](images/bronze_anp_biodiesel.png)
+*Figura 3 — Persistência e validação dos dados brutos da ANP - Biodiesel na camada Bronze, armazenados em formato Delta. Fonte: elaboração própria no Databricks.*
+
+![Persistência dos dados da ANP-Matérias-primas na camada Bronze](images/bronze_anp_materia_prima.png)
+*Figura 4 — Persistência e validação dos dados brutos do ANP - Matérias-primas na camada Bronze, armazenados em formato Delta. Fonte: elaboração própria no Databricks.*
 
 > 📓 **Implementação detalhada:** consulte o notebook
 > [`01_bronze_ingestao.ipynb`](notebooks/01_bronze_ingestao.ipynb)
@@ -228,6 +232,7 @@ Como resultado, foram criadas as tabelas:
 Como evidência da execução da etapa Silver, as três tabelas tratadas foram persistidas em formato Delta e posteriormente validadas quanto à quantidade de registros.
 
 ![Persistência e validação das tabelas da camada Silver](images/silver_tabelas_persistidas.png)
+*Figura 5 — Persistência e validação das tabelas da camada Silver no Databricks. As tabelas `silver_ibge_soja`, `silver_anp_biodiesel` e `silver_anp_materia_prima` foram armazenadas em formato Delta e validadas quanto à quantidade de registros após as etapas de tratamento e padronização. Fonte: elaboração própria no Databricks.*
 
 > 📓 **Implementação detalhada:** consulte o notebook
 > [`02_silver_transformacao.ipynb`](notebooks/02_silver_transformacao.ipynb)
@@ -252,8 +257,7 @@ A segunda tabela Gold possui granularidade de **região e ano** e permite acompa
 Como evidência da execução da camada Gold, as tabelas analíticas foram persistidas em formato Delta e validadas quanto à quantidade de registros resultantes.
 
 ![Persistência e validação das tabelas da camada Gold](images/gold_tabelas_persistidas.png)
-
-*Figura — Persistência e validação das tabelas analíticas da camada Gold. A tabela `gold_soja_biodiesel_regiao_ano` contém 45 registros e a tabela `gold_materia_prima_soja_regiao_ano` contém 34 registros após as etapas de agregação e integração. Fonte: elaboração própria no Databricks.*
+*Figura 6 — Persistência e validação das tabelas analíticas da camada Gold. A tabela `gold_soja_biodiesel_regiao_ano` contém 45 registros e a tabela `gold_materia_prima_soja_regiao_ano` contém 34 registros após as etapas de agregação e integração. Fonte: elaboração própria no Databricks.*
 
 > 📓 **Implementação detalhada:** consulte o notebook
 > [`03_gold_analise.ipynb`](notebooks/03_gold_analise.ipynb)
@@ -278,8 +282,7 @@ A qualidade dos dados foi avaliada durante as etapas de transformação e após 
 Durante o tratamento dos dados do IBGE, foram identificados valores não numéricos representados pelo caractere `-`, indicando ausência de informação na fonte. Esses valores foram convertidos para `NULL`, evitando interpretá-los incorretamente como produção ou área igual a zero.
 
 ![Verificação de valores ausentes nos dados do IBGE](images/silver_valores_ausentes_ibge.png)
-
-*Figura — Verificação e tratamento de valores ausentes nos dados do IBGE/PAM durante a transformação na camada Silver. Os valores indisponíveis na fonte foram preservados como `NULL`, evitando sua interpretação como valores iguais a zero. Fonte: elaboração própria no Databricks.*
+*Figura 7 — Verificação e tratamento de valores ausentes nos dados do IBGE/PAM durante a transformação na camada Silver. Os valores indisponíveis na fonte foram preservados como `NULL`, evitando sua interpretação como valores iguais a zero. Fonte: elaboração própria no Databricks.*
 
 Após a transformação, foram identificados valores nulos em alguns dos indicadores agrícolas. Esses registros foram mantidos, pois representam indisponibilidade da informação na fonte e não necessariamente ausência de produção. Dessa forma, não foi realizado preenchimento artificial dos valores ausentes.
 
@@ -302,8 +305,7 @@ Na tabela `gold_soja_biodiesel_regiao_ano`, foram obtidos 45 registros, correspo
 Não foram identificados valores nulos nas medidas utilizadas nessa tabela, nem valores negativos para a produção de soja ou para a produção de biodiesel. Também foram confirmados nove anos distintos e cinco regiões, conforme esperado para o escopo definido.
 
 ![Validação de qualidade e consistência da tabela Gold](images/gold_qualidade_consistencia.png)
-
-*Figura — Verificações de completude, unicidade e consistência da tabela `gold_soja_biodiesel_regiao_ano`. Foram obtidos 45 registros e 45 combinações únicas de ano e região, sem valores nulos nas variáveis analisadas e sem valores negativos de produção. Também foram confirmados nove anos e cinco regiões no período analisado. Fonte: elaboração própria no Databricks.*
+*Figura 8 — Verificações de completude, unicidade e consistência da tabela `gold_soja_biodiesel_regiao_ano`. Foram obtidos 45 registros e 45 combinações únicas de ano e região, sem valores nulos nas variáveis analisadas e sem valores negativos de produção. Também foram confirmados nove anos e cinco regiões no período analisado. Fonte: elaboração própria no Databricks.*
 
 As estatísticas descritivas indicaram diferenças relevantes de magnitude entre as observações regionais. Entretanto, os valores extremos foram mantidos, pois representam observações válidas das fontes oficiais e não foram identificados indícios de erro que justificassem sua remoção ou substituição.
 
@@ -330,8 +332,7 @@ Considerando 2015 como índice 100, a produção de soja atingiu aproximadamente
 Apesar da tendência geral de crescimento das duas séries, a evolução não ocorreu de forma proporcional. A produção de biodiesel apresentou crescimento relativo mais intenso, principalmente a partir de 2018, enquanto a produção de soja apresentou oscilações ao longo do período.
 
 ![Evolução relativa da produção de soja e biodiesel entre 2015 e 2023](images/analise_01_evolucao_relativa.png)
-
-*Figura 1 — Evolução relativa da produção de soja e biodiesel no Brasil, considerando 2015 como índice-base 100. Fonte: elaboração própria a partir de dados do IBGE/PAM e ANP.*
+*Figura 9 — Evolução relativa da produção de soja e biodiesel no Brasil, considerando 2015 como índice-base 100. Fonte: elaboração própria a partir de dados do IBGE/PAM e ANP.*
 
 **Resposta à pergunta 1:** tanto a produção de soja quanto a produção de biodiesel cresceram entre 2015 e 2023, porém em ritmos diferentes, com crescimento relativo mais acentuado da produção de biodiesel.
 
@@ -344,12 +345,10 @@ No acumulado do período analisado, o **Centro-Oeste apresenta o maior volume de
 Os resultados mostram que uma maior produção agrícola de soja em determinada região não implica necessariamente uma produção de biodiesel na mesma proporção. Isso é compatível com o fato de a soja possuir diferentes destinos econômicos e de a cadeia produtiva do biodiesel depender de outros fatores além da disponibilidade regional do grão.
 
 ![Produção acumulada de soja por região entre 2015 e 2023](images/analise_02a_producao_soja_regiao.png)
-
-*Figura 2 — Produção acumulada de soja por região entre 2015 e 2023. Fonte: elaboração própria a partir de dados do IBGE/PAM.*
+*Figura 10 — Produção acumulada de soja por região entre 2015 e 2023. Fonte: elaboração própria a partir de dados do IBGE/PAM.*
 
 ![Produção acumulada de biodiesel por região entre 2015 e 2023](images/analise_02b_producao_biodiesel_regiao.png)
-
-*Figura 3 — Produção acumulada de biodiesel por região entre 2015 e 2023. Fonte: elaboração própria a partir de dados da ANP.*
+*Figura 11 — Produção acumulada de biodiesel por região entre 2015 e 2023. Fonte: elaboração própria a partir de dados da ANP.*
 
 **Resposta à pergunta 2:** a produção de soja está fortemente concentrada no Centro-Oeste e no Sul, enquanto a produção de biodiesel também se concentra nessas regiões, mas apresenta uma distribuição regional que não acompanha de forma diretamente proporcional a produção agrícola de soja.
 
@@ -364,8 +363,7 @@ O volume agregado passou de aproximadamente **2,77 milhões de m³ em 2017** par
 Mesmo com a queda observada no último ano completo da série, o volume de 2022 permaneceu superior ao registrado no início do período analisado.
 
 ![Evolução do uso de matérias-primas derivadas da soja na produção de biodiesel entre 2017 e 2022](images/analise_03_materia_prima_soja.png)
-
-*Figura 4 — Evolução do uso de matérias-primas derivadas da soja na produção de biodiesel entre 2017 e 2022. Fonte: elaboração própria a partir de dados da ANP.*
+*Figura 12 — Evolução do uso de matérias-primas derivadas da soja na produção de biodiesel entre 2017 e 2022. Fonte: elaboração própria a partir de dados da ANP.*
 
 **Resposta à pergunta 3:** a utilização de matérias-primas derivadas da soja apresentou crescimento entre 2017 e 2021, seguido por redução em 2022, permanecendo ainda acima do volume observado em 2017.
 
@@ -380,8 +378,7 @@ Entretanto, esse resultado deve ser interpretado com cautela. A análise conside
 Além disso, correlação não implica causalidade. A produção de soja possui diferentes destinos econômicos e o crescimento da produção de biodiesel depende de outros fatores que não foram modelados neste MVP.
 
 ![Associação entre a produção nacional de soja e biodiesel entre 2015 e 2023](images/analise_04_correlacao.png)
-
-*Figura 5 — Associação entre a produção nacional de soja e a produção nacional de biodiesel no período de 2015 a 2023. Fonte: elaboração própria a partir de dados do IBGE/PAM e da ANP.*
+*Figura 13 — Associação entre a produção nacional de soja e a produção nacional de biodiesel no período de 2015 a 2023. Fonte: elaboração própria a partir de dados do IBGE/PAM e da ANP.*
 
 **Resposta à pergunta 4:** os dados apresentam uma associação positiva entre a produção de soja e a produção de biodiesel no período analisado, mas os resultados não permitem concluir que o aumento da produção de soja seja responsável pelo crescimento da produção de biodiesel.
 
