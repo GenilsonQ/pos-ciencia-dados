@@ -112,7 +112,59 @@ A base de matérias-primas da ANP segue um fluxo independente até a camada Gold
 
 ### Catálogo de Dados
 
-O catálogo a seguir documenta as tabelas das camadas Silver e Gold utilizadas no processamento e nas análises do projeto. Para cada atributo são apresentados o tipo de dado, sua descrição, unidade ou domínio quando aplicável e sua origem.
+O catálogo a seguir documenta as tabelas das camadas Bronze, Silver e Gold utilizadas no pipeline e nas análises do projeto. Para cada atributo são apresentados o tipo de dado, sua descrição, unidade ou domínio quando aplicável e sua origem.
+
+#### `bronze_ibge_pam_soja`
+
+Dados brutos da Pesquisa Agrícola Municipal (PAM), obtidos por meio do SIDRA/IBGE.
+
+| Campo | Tipo | Descrição |
+|---|---|---|
+| `D1C` | string | Código da Unidade da Federação |
+| `D1N` | string | Nome da Unidade da Federação |
+| `D2C` | string | Código da variável consultada |
+| `D2N` | string | Nome da variável consultada |
+| `D3C` | string | Código do ano de referência |
+| `D3N` | string | Ano de referência |
+| `D4C` | string | Código do produto agrícola |
+| `D4N` | string | Nome do produto agrícola |
+| `MC` | string | Código da unidade de medida |
+| `MN` | string | Nome da unidade de medida |
+| `NC` | string | Código do nível territorial |
+| `NN` | string | Nome do nível territorial |
+| `V` | string | Valor observado |
+
+**Linhagem:** SIDRA/IBGE → `bronze_ibge_pam_soja` → `silver_ibge_soja`.
+
+#### `bronze_anp_biodiesel`
+
+Dados brutos referentes à produção de biodiesel disponibilizados pela ANP.
+
+| Campo | Tipo | Descrição |
+|---|---|---|
+| `ano` | long | Ano de referência |
+| `mes` | string | Mês de referência |
+| `grande_regiao` | string | Grande região brasileira |
+| `unidade_federacao` | string | Unidade da Federação |
+| `produtor` | string | Produtor de biodiesel |
+| `produto` | string | Produto registrado |
+| `producao` | string | Quantidade de biodiesel produzida, mantida no formato original da fonte |
+
+**Linhagem:** ANP → `bronze_anp_biodiesel` → `silver_anp_biodiesel`.
+
+#### `bronze_anp_materia_prima`
+
+Dados brutos referentes às matérias-primas utilizadas na produção de biodiesel disponibilizados pela ANP.
+
+| Campo | Tipo | Descrição |
+|---|---|---|
+| `mes_ano` | string | Competência mensal do registro |
+| `regiao` | string | Região brasileira |
+| `estado` | string | Estado associado ao registro |
+| `produto` | string | Matéria-prima utilizada |
+| `quantidade_m3` | long | Quantidade registrada em metros cúbicos (m³) |
+
+**Linhagem:** ANP → `bronze_anp_materia_prima` → `silver_anp_materia_prima`.
 
 #### `silver_ibge_soja`
 
