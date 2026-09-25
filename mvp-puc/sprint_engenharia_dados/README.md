@@ -387,4 +387,12 @@ Além disso, correlação não implica causalidade. A produção de soja possui 
 
 ## Autoavaliação
 
-*Em desenvolvimento.*
+O MVP atingiu o objetivo proposto de construir um pipeline de dados em nuvem capaz de integrar informações agrícolas do IBGE com dados da cadeia produtiva do biodiesel disponibilizados pela ANP. A organização do processamento nas camadas Bronze, Silver e Gold permitiu separar as etapas de ingestão, tratamento e disponibilização dos dados para análise, mantendo a rastreabilidade entre as fontes originais e os resultados obtidos.
+
+As quatro perguntas de negócio definidas no início do projeto puderam ser analisadas a partir das tabelas construídas. Os resultados permitiram observar a evolução da produção de soja e biodiesel, suas diferenças de distribuição regional, a utilização de matérias-primas derivadas da soja e a associação existente entre as duas séries ao longo do período analisado.
+
+Como principais limitações, destaca-se a diferença de cobertura temporal entre as fontes. A base de matérias-primas da ANP possui dados disponíveis somente entre janeiro de 2017 e agosto de 2023, o que exigiu considerar apenas os anos completos de 2017 a 2022 nas comparações anuais dessa variável. Além disso, a análise de correlação entre produção de soja e biodiesel utiliza apenas nove observações anuais e não permite estabelecer uma relação de causalidade entre as variáveis.
+
+Como evolução futura, o projeto poderia incorporar outras variáveis relacionadas à cadeia do biodiesel, permitindo investigar fatores adicionais que podem influenciar sua produção. O pipeline também poderia ser automatizado para realizar atualizações periódicas das fontes e das tabelas analíticas, aproximando a solução de um cenário de engenharia de dados em produção.
+
+De forma geral, o desenvolvimento do MVP permitiu aplicar de maneira integrada conceitos de ingestão, armazenamento, transformação, qualidade, modelagem e análise de dados em ambiente de nuvem, utilizando PySpark, tabelas Delta e a arquitetura Medallion no Databricks.
