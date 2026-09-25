@@ -281,6 +281,10 @@ Na tabela `gold_soja_biodiesel_regiao_ano`, foram obtidos 45 registros, correspo
 
 Não foram identificados valores nulos nas medidas utilizadas nessa tabela, nem valores negativos para a produção de soja ou para a produção de biodiesel. Também foram confirmados nove anos distintos e cinco regiões, conforme esperado para o escopo definido.
 
+![Validação de qualidade e consistência da tabela Gold](images/gold_qualidade_consistencia.png)
+
+*Figura — Verificações de completude, unicidade e consistência da tabela `gold_soja_biodiesel_regiao_ano`. Foram obtidos 45 registros e 45 combinações únicas de ano e região, sem valores nulos nas variáveis analisadas e sem valores negativos de produção. Também foram confirmados nove anos e cinco regiões no período analisado. Fonte: elaboração própria no Databricks.*
+
 As estatísticas descritivas indicaram diferenças relevantes de magnitude entre as observações regionais. Entretanto, os valores extremos foram mantidos, pois representam observações válidas das fontes oficiais e não foram identificados indícios de erro que justificassem sua remoção ou substituição.
 
 Na tabela `gold_materia_prima_soja_regiao_ano`, foi mantida a cobertura temporal disponível na fonte da ANP. Como os dados de 2023 estão disponíveis apenas até agosto, as comparações anuais dessa variável consideram prioritariamente os anos completos de 2017 a 2022, evitando comparar um ano parcial diretamente com anos completos.
