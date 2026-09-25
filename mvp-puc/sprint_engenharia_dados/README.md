@@ -199,6 +199,10 @@ Os valores originais foram preservados sempre que possível. Foram realizados ap
 
 *Figura 1 — Persistência e validação dos dados brutos do IBGE/PAM na camada Bronze, armazenados em formato Delta. Fonte: elaboração própria no Databricks.*
 
+> 📓 **Implementação detalhada:** consulte o notebook
+> [`01_bronze_ingestao.ipynb`](notebooks/01_bronze_ingestao.ipynb)
+> para visualizar o processo completo de ingestão, preparação inicial e persistência dos dados na camada Bronze.
+
 ### Camada Silver
 
 Na camada Silver foram realizadas as transformações necessárias para padronizar os dados e prepará-los para integração e análise.
@@ -221,6 +225,10 @@ Como evidência da execução da etapa Silver, as três tabelas tratadas foram p
 
 ![Persistência e validação das tabelas da camada Silver](images/silver_tabelas_persistidas.png)
 
+> 📓 **Implementação detalhada:** consulte o notebook
+> [`02_silver_transformacao.ipynb`](notebooks/02_silver_transformacao.ipynb)
+> para visualizar as etapas de limpeza, padronização, tratamento dos valores ausentes e persistência das tabelas da camada Silver.
+
 ### Camada Gold
 
 A camada Gold foi construída para disponibilizar dados diretamente relacionados às perguntas de negócio.
@@ -242,6 +250,10 @@ Como evidência da execução da camada Gold, as tabelas analíticas foram persi
 ![Persistência e validação das tabelas da camada Gold](images/gold_tabelas_persistidas.png)
 
 *Figura — Persistência e validação das tabelas analíticas da camada Gold. A tabela `gold_soja_biodiesel_regiao_ano` contém 45 registros e a tabela `gold_materia_prima_soja_regiao_ano` contém 34 registros após as etapas de agregação e integração. Fonte: elaboração própria no Databricks.*
+
+> 📓 **Implementação detalhada:** consulte o notebook
+> [`03_gold_analise.ipynb`](notebooks/03_gold_analise.ipynb)
+> para visualizar a construção das tabelas analíticas, as verificações de qualidade e as análises utilizadas para responder às perguntas de negócio.
 
 Dessa forma, o pipeline implementado pode ser resumido pelo fluxo:
 
@@ -273,6 +285,10 @@ Nos dados da ANP foram identificados problemas de codificação de caracteres no
 
 Na base de matérias-primas, a competência foi convertida para o tipo data e validada quanto à cobertura temporal. Foram encontrados registros entre janeiro de 2017 e agosto de 2023, totalizando 80 competências mensais distintas. Essa característica foi preservada e considerada posteriormente nas análises, sem preenchimento dos períodos não disponíveis.
 
+> 📓 **Implementação detalhada:** consulte o notebook
+> [`02_silver_transformacao.ipynb`](notebooks/02_silver_transformacao.ipynb)
+> para visualizar as etapas de limpeza, padronização, tratamento dos valores ausentes, etc.
+
 ### Validação das tabelas Gold
 
 Após a construção das tabelas Gold, foram realizadas novas verificações para avaliar se os dados estavam adequados às análises de negócio.
@@ -290,6 +306,10 @@ As estatísticas descritivas indicaram diferenças relevantes de magnitude entre
 Na tabela `gold_materia_prima_soja_regiao_ano`, foi mantida a cobertura temporal disponível na fonte da ANP. Como os dados de 2023 estão disponíveis apenas até agosto, as comparações anuais dessa variável consideram prioritariamente os anos completos de 2017 a 2022, evitando comparar um ano parcial diretamente com anos completos.
 
 Dessa forma, os tratamentos realizados buscaram preservar os dados das fontes sempre que possível, corrigindo problemas técnicos de formato e padronização sem introduzir valores artificiais ou excluir observações válidas.
+
+> 📓 **Implementação detalhada:** consulte o notebook
+> [`03_gold_analise.ipynb`](notebooks/03_gold_analise.ipynb)
+> para visualizar as verificações de qualidade.
 
 ## Análise de Dados
 
@@ -360,6 +380,10 @@ Além disso, correlação não implica causalidade. A produção de soja possui 
 *Figura 5 — Associação entre a produção nacional de soja e a produção nacional de biodiesel no período de 2015 a 2023. Fonte: elaboração própria a partir de dados do IBGE/PAM e da ANP.*
 
 **Resposta à pergunta 4:** os dados apresentam uma associação positiva entre a produção de soja e a produção de biodiesel no período analisado, mas os resultados não permitem concluir que o aumento da produção de soja seja responsável pelo crescimento da produção de biodiesel.
+
+> 📓 **Implementação detalhada:** consulte o notebook
+> [`03_gold_analise.ipynb`](notebooks/03_gold_analise.ipynb)
+> visualizar as análises utilizadas para responder às perguntas de negócio.
 
 ## Autoavaliação
 
