@@ -237,6 +237,12 @@ Também foi criada uma tabela específica para analisar a utilização de matér
 
 A segunda tabela Gold possui granularidade de **região e ano** e permite acompanhar a evolução da utilização de matérias-primas derivadas da soja na produção de biodiesel.
 
+Como evidência da execução da camada Gold, as tabelas analíticas foram persistidas em formato Delta e validadas quanto à quantidade de registros resultantes.
+
+![Persistência e validação das tabelas da camada Gold](images/gold_tabelas_persistidas.png)
+
+*Figura — Persistência e validação das tabelas analíticas da camada Gold. A tabela `gold_soja_biodiesel_regiao_ano` contém 45 registros e a tabela `gold_materia_prima_soja_regiao_ano` contém 34 registros após as etapas de agregação e integração. Fonte: elaboração própria no Databricks.*
+
 Dessa forma, o pipeline implementado pode ser resumido pelo fluxo:
 
 `Fontes públicas (IBGE/ANP) → Bronze → Silver → Gold → Análises`
