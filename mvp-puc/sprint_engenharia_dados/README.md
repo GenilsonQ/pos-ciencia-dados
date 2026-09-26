@@ -257,7 +257,7 @@ Os valores originais foram preservados sempre que possível. Foram realizados ap
 *Figura 3 — Persistência e validação dos dados brutos da ANP - Biodiesel na camada Bronze, armazenados em formato Delta. Fonte: elaboração própria no Databricks.*
 
 ![Persistência dos dados da ANP-Matérias-primas na camada Bronze](images/bronze_anp_materia_prima.png)
-*Figura 4 — Persistência e validação dos dados brutos do ANP - Matérias-primas na camada Bronze, armazenados em formato Delta. Fonte: elaboração própria no Databricks.*
+*Figura 4 — Persistência e validação dos dados brutos da ANP - Matérias-primas na camada Bronze, armazenados em formato Delta. Fonte: elaboração própria no Databricks.*
 
 > 📓 **Implementação detalhada:** consulte o notebook
 > [`01_bronze_ingestao.ipynb`](notebooks/01_bronze_ingestao.ipynb)
