@@ -33,9 +33,9 @@ Os dados utilizados neste projeto foram obtidos de fontes públicas oficiais e c
 
 Foram utilizadas três bases de dados:
 
-- **IBGE/PAM:** dados da Produção Agrícola Municipal referentes à cultura da soja, contendo informações como área plantada, área colhida, quantidade produzida, rendimento médio e valor da produção.
-- **ANP - Produção de biodiesel:** dados históricos da produção de biodiesel, contendo informações de período, região, unidade da federação, produtor e volume produzido.
-- **ANP - Matérias-primas:** dados sobre as matérias-primas utilizadas na produção de biodiesel, contendo período, região, estado, tipo de matéria-prima e quantidade utilizada.
+- **IBGE/PAM:** dados da Produção Agrícola Municipal referentes à cultura da soja, contendo informações como área plantada, área colhida, quantidade produzida, rendimento médio e valor da produção. Os dados foram obtidos da [Tabela 5457 do SIDRA](https://sidra.ibge.gov.br/tabela/5457). A [documentação da Produção Agrícola Municipal - IBGE](https://www.ibge.gov.br/estatisticas/economicas/agricultura-e-pecuaria/9117-producao-agricola-municipal-culturas-temporarias-e-permanentes.html) foi utilizada como referência para a compreensão das variáveis e características da pesquisa.
+- **ANP - Produção de biodiesel:** dados históricos da produção de biodiesel, contendo informações de período, região, unidade da federação, produtor e volume produzido. A ANP disponibiliza a [documentação de metadados da produção de biodiesel](https://www.gov.br/anp/pt-br/centrais-de-conteudo/dados-abertos/arquivos/arquivos-producao-de-biocombustiveis/metadados-biodiesel.pdf), utilizada como referência para a descrição dos campos, tipos de dados e unidade de medida.
+- **ANP - Matérias-primas:** dados sobre as matérias-primas utilizadas na produção de biodiesel, contendo período, região, estado, tipo de matéria-prima e quantidade utilizada. A [base pública de matérias-primas da ANP](https://www.gov.br/anp/pt-br/centrais-de-conteudo/dados-abertos/arquivos/arquivos-painel-de-produtores-de-derivados-producao-de-biocombustiveis/biodiesel-materia-prima.csv/view) corresponde ao conjunto de dados utilizado no projeto.
 
 Os dados do IBGE foram obtidos por meio da API SIDRA, enquanto os dados da ANP foram obtidos a partir dos arquivos públicos disponibilizados pela agência.
 
