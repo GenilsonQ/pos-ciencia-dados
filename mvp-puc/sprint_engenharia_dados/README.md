@@ -116,7 +116,7 @@ O catálogo a seguir documenta as tabelas das camadas Bronze, Silver e Gold util
 
 #### `bronze_ibge_pam_soja`
 
-Dados brutos da Pesquisa Agrícola Municipal (PAM), obtidos por meio do SIDRA/IBGE.
+Dados brutos da Produção Agrícola Municipal (PAM), obtidos por meio do SIDRA/IBGE.
 
 | Campo | Tipo | Descrição |
 |---|---|---|
