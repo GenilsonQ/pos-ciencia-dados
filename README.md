@@ -4,7 +4,7 @@ O repositório reúne MVPs desenvolvidos durante as disciplinas do curso, acompa
 
 ## 📂 MVPs
 
-Os MVPs estão organizados em uma área específica do repositório, contendo a documentação e os projetos de cada sprint.
+Estão organizados em uma área específica do repositório, contendo a documentação e os projetos de cada sprint.
 
 📁 [Acessar os MVPs](./mvp-puc/)
 
