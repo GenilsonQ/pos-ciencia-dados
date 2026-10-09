@@ -8,12 +8,6 @@ Os MVPs desenvolvidos durante a pós-graduação estão organizados em uma área
 
 📁 [Acessar os MVPs](./mvp-puc/)
 
-## 🎓 Formação
-
-**Pós-Graduação em Ciência de Dados e Analytics**  
-PUC-Rio — Departamento de Informática  
-2026–2027
-
 ## 👤 Pós-graduando
 
 **Genilson do Nascimento Carvalho Júnior**  
